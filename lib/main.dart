@@ -11,167 +11,408 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'WriteDev Onboarding',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
+        brightness: Brightness.light,
         fontFamily: 'SpaceGrotesk',
-        colorScheme: const ColorScheme.light(
-          primary: Color(0xFF1b63bb),
-          surface: Color(0xFFf6f7f8),
-          onPrimary: Colors.white,
-          onSurface: Colors.black,
+        colorScheme: ColorScheme.light(
+          primary: const Color(0xFF1b63bb),
+          background: const Color(0xFFf6f7f8),
         ),
       ),
       darkTheme: ThemeData(
-        useMaterial3: true,
+        brightness: Brightness.dark,
         fontFamily: 'SpaceGrotesk',
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF1b63bb),
-          surface: Color(0xFF0E1A2B),
-          onPrimary: Colors.white,
-          onSurface: Colors.white,
+        colorScheme: ColorScheme.dark(
+          primary: const Color(0xFF1b63bb),
+          surface: const Color(0xFF0E1A2B),
         ),
       ),
-      themeMode: ThemeMode.dark, // Force dark mode for now
-      home: const OnboardingScreen(),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      home: const OnboardingPage(),
     );
   }
 }
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({super.key});
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page?.round() ?? 0;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 80,
-                        width: 80,
-                        margin: const EdgeInsets.only(bottom: 16.0),
-                        child: CustomPaint(painter: LogoPainter()),
-                      ),
-                      Text(
-                        'WriteDev',
-                        style: TextStyle(
-                          color: colors.onSurface,
-                          fontSize: 42,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 32),
-                      Text(
-                        'Share code. Get reach. No followers needed.',
-                        style: TextStyle(
-                          color: colors.onSurface.withOpacity(0.9),
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
-                          height: 1.3,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 40),
-                      Container(
-                        constraints: const BoxConstraints(maxWidth: 320),
-                        child: Column(
-                          children: [
-                            _buildButton(context, 'Sign up with GitHub'),
-                            const SizedBox(height: 16),
-                            _buildButton(context, 'Sign up with Google'),
-                            const SizedBox(height: 16),
-                            _buildButton(context, 'Sign up with Email'),
-                            const SizedBox(height: 24),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Continue as Guest',
-                                style: TextStyle(
-                                  color: Colors.grey[400],
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+              child: PageView(
+                controller: _pageController,
+                children: const [
+                  FirstOnboardingScreen(),
+                  SecondOnboardingScreen(),
+                  ThirdOnboardingScreen(),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(3, (index) {
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: _currentPage == index ? 32 : 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    decoration: BoxDecoration(
+                      color: _currentPage == index
+                          ? const Color(0xFF00f5d4)
+                          : const Color(0xFF3d4652),
+                      borderRadius: BorderRadius.circular(9999),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            if (_currentPage < 2)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF00f5d4),
+                    foregroundColor: Colors.black87,
+                    minimumSize: const Size(double.infinity, 56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SpaceGrotesk',
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-            _buildPageIndicators(),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildButton(BuildContext context, String text) {
-    final colors = Theme.of(context).colorScheme;
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white.withOpacity(0.08),
-        foregroundColor: colors.onSurface,
-        minimumSize: const Size(double.infinity, 56),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.white.withOpacity(0.15)),
+class FirstOnboardingScreen extends StatelessWidget {
+  const FirstOnboardingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 80,
+              width: 80,
+              margin: const EdgeInsets.only(bottom: 16.0),
+              child: CustomPaint(painter: LogoPainter()),
+            ),
+            Text(
+              'WriteDev',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                letterSpacing: -0.5,
+                fontFamily: 'SpaceGrotesk',
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'Share code. Get reach. No followers needed.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                letterSpacing: -0.5,
+                fontFamily: 'SpaceGrotesk',
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 32),
+            Container(
+              constraints: const BoxConstraints(maxWidth: 320),
+              child: Column(
+                children: [
+                  _buildButton(context, 'Sign up with GitHub'),
+                  const SizedBox(height: 16),
+                  _buildButton(context, 'Sign up with Google'),
+                  const SizedBox(height: 16),
+                  _buildButton(context, 'Sign up with Email'),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Continue as Guest',
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 14,
+                        fontFamily: 'SpaceGrotesk',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        elevation: 0,
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 0.2,
-        ),
-        overflow: TextOverflow.ellipsis,
       ),
     );
   }
+}
 
-  Widget _buildPageIndicators() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
-      child: Row(
+class SecondOnboardingScreen extends StatelessWidget {
+  const SecondOnboardingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [_indicator(true), _indicator(false), _indicator(false)],
+        children: [
+          Container(
+            height: 300,
+            width: 300,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/assets/images/globe.png'),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            'Connect with developers globally',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -0.5,
+              fontFamily: 'SpaceGrotesk',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Discover and share cutting-edge code with a global community of developers. No followers, no algorithms, just pure knowledge sharing.',
+            style: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 16,
+              fontFamily: 'SpaceGrotesk',
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
+}
 
-  Widget _indicator(bool isActive) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      width: isActive ? 32 : 8,
-      height: 8,
-      margin: const EdgeInsets.symmetric(horizontal: 6),
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF00f5d4) : const Color(0xFF3d4652),
-        borderRadius: BorderRadius.circular(9999),
+class ThirdOnboardingScreen extends StatelessWidget {
+  const ThirdOnboardingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/assets/images/waveform.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            'Welcome to WriteDev',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -0.5,
+              fontFamily: 'SpaceGrotesk',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Join the community where every voice is heard.',
+            style: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 16,
+              fontFamily: 'SpaceGrotesk',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 32),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 320),
+            child: Column(
+              children: [
+                _buildButtonWithIcon(
+                  context,
+                  'Sign Up with GitHub',
+                  Icons.code,
+                ),
+                const SizedBox(height: 16),
+                _buildButtonWithIcon(
+                  context,
+                  'Sign Up with Google',
+                  Icons.g_translate,
+                ),
+                const SizedBox(height: 16),
+                _buildButtonWithIcon(
+                  context,
+                  'Sign Up with Email',
+                  Icons.email,
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account? ',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 14,
+                          fontFamily: 'SpaceGrotesk',
+                        ),
+                      ),
+                      const Text(
+                        'Log In',
+                        style: TextStyle(
+                          color: const Color(0xFF00f5d4),
+                          fontSize: 14,
+                          fontFamily: 'SpaceGrotesk',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
+}
+
+Widget _buildButton(BuildContext context, String text) {
+  return ElevatedButton(
+    onPressed: () {},
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.white.withOpacity(0.1),
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, 56),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.white.withOpacity(0.2)),
+      ),
+      elevation: 0,
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 0.24,
+        fontFamily: 'SpaceGrotesk',
+      ),
+      overflow: TextOverflow.ellipsis,
+    ),
+  );
+}
+
+Widget _buildButtonWithIcon(BuildContext context, String text, IconData icon) {
+  return ElevatedButton(
+    onPressed: () {},
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.white.withOpacity(0.1),
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, 56),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(9999),
+        side: BorderSide(color: Colors.white.withOpacity(0.2)),
+      ),
+      elevation: 0,
+    ),
+    child: Row(
+      children: [
+        Icon(icon, color: Colors.white, size: 20),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'SpaceGrotesk',
+            ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class LogoPainter extends CustomPainter {
