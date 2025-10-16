@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/widgets/social_button.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../home/screens/home_feed_screen.dart';
 
 class ThirdOnboardingScreen extends StatelessWidget {
   const ThirdOnboardingScreen({super.key});
@@ -80,7 +81,12 @@ class ThirdOnboardingScreen extends StatelessWidget {
             ),
           const SizedBox(height: 16),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomeFeedScreen()),
+              );
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
