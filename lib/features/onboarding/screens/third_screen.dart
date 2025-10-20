@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/widgets/social_button.dart';
 import '../../../core/widgets/primary_button.dart';
-import '../../home/screens/home_feed_screen.dart';
+import '../../../core/navigation/main_navigation_screen.dart';
 
 class ThirdOnboardingScreen extends StatelessWidget {
   const ThirdOnboardingScreen({super.key});
@@ -57,7 +57,12 @@ class ThirdOnboardingScreen extends StatelessWidget {
                       height: 20,
                       color: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainNavigationScreen()),
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
                   PrimaryButton(
@@ -68,12 +73,22 @@ class ThirdOnboardingScreen extends StatelessWidget {
                       height: 20,
                       color: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainNavigationScreen()),
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
                   PrimaryButton(
                     text: 'Sign up with Email',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainNavigationScreen()),
+                      );
+                    },
                     leadingIcon: Icon(Icons.email, color: Colors.white, size: 20),
                   ),
                 ],
@@ -84,7 +99,7 @@ class ThirdOnboardingScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeFeedScreen()),
+                MaterialPageRoute(builder: (context) => MainNavigationScreen()),
               );
             },
             child: Row(
