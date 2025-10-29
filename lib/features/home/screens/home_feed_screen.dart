@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../core/widgets/logo_painter.dart';
 
 class HomeFeedScreen extends StatelessWidget {
+  const HomeFeedScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +47,8 @@ class HomeFeedScreen extends StatelessWidget {
             name: 'John Doe',
             level: 'Level 8 Coder',
             daysJoined: 365,
-            content: 'This is a sample post on WriteDev. Every post gets visibility, no followers or algorithm bias. #developers #productowners',
+            content:
+                'This is a sample post on WriteDev. Every post gets visibility, no followers or algorithm bias. #developers #productowners',
             impressions: '12.5k',
             likes: '1.2k',
             levelColor: Color(0xFF1b63bb),
@@ -54,7 +57,8 @@ class HomeFeedScreen extends StatelessWidget {
             name: 'Jane Smith',
             level: 'Level 3 PM',
             daysJoined: 120,
-            content: 'Just discovered WriteDev! Loving the clean interface and the focus on content. #writedev #socialmedia',
+            content:
+                'Just discovered WriteDev! Loving the clean interface and the focus on content. #writedev #socialmedia',
             impressions: '8.9k',
             likes: '856',
             levelColor: Color(0xFF9c27b0),
@@ -91,11 +95,7 @@ class HomeFeedScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 24,
                   backgroundColor: Colors.grey[300],
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.grey[600],
-                    size: 24,
-                  ),
+                  child: Icon(Icons.person, color: Colors.grey[600], size: 24),
                 ),
                 SizedBox(width: 12),
                 Expanded(
@@ -115,7 +115,10 @@ class HomeFeedScreen extends StatelessWidget {
                           ),
                           SizedBox(width: 8),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: levelColor,
                               borderRadius: BorderRadius.circular(12),
@@ -247,11 +250,7 @@ class HomeFeedScreen extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: Colors.grey[400],
-              size: 20,
-            ),
+            Icon(icon, color: Colors.grey[400], size: 20),
             SizedBox(width: 6),
             Text(
               label,

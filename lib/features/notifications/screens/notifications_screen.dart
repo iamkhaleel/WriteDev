@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NotificationsScreen extends StatefulWidget {
+  const NotificationsScreen({super.key});
+
   @override
   _NotificationsScreenState createState() => _NotificationsScreenState();
 }
@@ -47,51 +49,57 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: Column(
         children: [
           // Tab Navigation
+          // Tab Navigation
           Container(
             height: 60,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _tabs.length,
-              itemBuilder: (context, index) {
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+            ), // Optional: add side padding
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceAround, // This spaces them evenly
+              children: _tabs.asMap().entries.map((entry) {
+                int index = entry.key;
+                String tab = entry.value;
                 bool isSelected = index == _selectedTab;
+
                 return GestureDetector(
                   onTap: () {
                     setState(() {
                       _selectedTab = index;
                     });
                   },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(height: 8),
-                        Text(
-                          _tabs[index],
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.grey[400],
-                            fontSize: 16,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                            fontFamily: 'SpaceGrotesk',
-                          ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 8),
+                      Text(
+                        tab,
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.grey[400],
+                          fontSize: 16,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          fontFamily: 'SpaceGrotesk',
                         ),
-                        SizedBox(height: 8),
-                        if (isSelected)
-                          Container(
-                            width: 20,
-                            height: 2,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF00f5d4),
-                              borderRadius: BorderRadius.circular(1),
-                            ),
-                          )
-                        else
-                          SizedBox(height: 2),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 8),
+                      if (isSelected)
+                        Container(
+                          width: 20,
+                          height: 2,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF00f5d4),
+                            borderRadius: BorderRadius.circular(1),
+                          ),
+                        )
+                      else
+                        SizedBox(height: 2),
+                    ],
                   ),
                 );
-              },
+              }).toList(),
             ),
           ),
           // Notifications List
@@ -108,7 +116,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       shape: BoxShape.circle,
                       border: Border.all(color: Color(0xFF3d4652), width: 1),
                     ),
-                    child: Icon(Icons.trending_up, color: Colors.white, size: 20),
+                    child: Icon(
+                      Icons.trending_up,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                   isUnread: true,
                   title: "You've leveled up! You are now a ",
@@ -119,7 +131,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   avatar: CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey[300],
-                    child: Icon(Icons.person, color: Colors.grey[600], size: 20),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey[600],
+                      size: 20,
+                    ),
                   ),
                   overlayIcon: Container(
                     width: 16,
@@ -128,17 +144,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       color: Color(0xFF9c27b0),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.alternate_email, color: Colors.white, size: 10),
+                    child: Icon(
+                      Icons.alternate_email,
+                      color: Colors.white,
+                      size: 10,
+                    ),
                   ),
                   isUnread: true,
-                  title: "@ada_lovelace mentioned you in a post: 'Great point on state management! What do you think, @dev_master?'",
+                  title:
+                      "@ada_lovelace mentioned you in a post: 'Great point on state management! What do you think, @dev_master?'",
                   time: "5m ago",
                 ),
                 _buildNotificationCard(
                   avatar: CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey[300],
-                    child: Icon(Icons.person, color: Colors.grey[600], size: 20),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey[600],
+                      size: 20,
+                    ),
                   ),
                   overlayIcon: Container(
                     width: 16,
@@ -150,14 +175,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     child: Icon(Icons.favorite, color: Colors.white, size: 10),
                   ),
                   isUnread: true,
-                  title: "@grace_hopper and 2 others liked your post: 'My new open-source project...'",
+                  title:
+                      "@grace_hopper and 2 others liked your post: 'My new open-source project...'",
                   time: "15m ago",
                 ),
                 _buildNotificationCard(
                   avatar: CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey[300],
-                    child: Icon(Icons.person, color: Colors.grey[600], size: 20),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey[600],
+                      size: 20,
+                    ),
                   ),
                   overlayIcon: Container(
                     width: 16,
@@ -166,17 +196,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       color: Colors.green,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.chat_bubble, color: Colors.white, size: 10),
+                    child: Icon(
+                      Icons.chat_bubble,
+                      color: Colors.white,
+                      size: 10,
+                    ),
                   ),
                   isUnread: false,
-                  title: "@alan_turing commented on your post: 'This is brilliant! Have you considered...'",
+                  title:
+                      "@alan_turing commented on your post: 'This is brilliant! Have you considered...'",
                   time: "1h ago",
                 ),
                 _buildNotificationCard(
                   avatar: CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey[300],
-                    child: Icon(Icons.person, color: Colors.grey[600], size: 20),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey[600],
+                      size: 20,
+                    ),
                   ),
                   overlayIcon: Container(
                     width: 16,
@@ -188,7 +227,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     child: Icon(Icons.favorite, color: Colors.white, size: 10),
                   ),
                   isUnread: false,
-                  title: "@margaret_h liked your post: 'Refactoring legacy code...'",
+                  title:
+                      "@margaret_h liked your post: 'Refactoring legacy code...'",
                   time: "3h ago",
                 ),
               ],
@@ -239,7 +279,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             )
           else
             SizedBox(width: 16),
-          
+
           // Icon or Avatar
           if (icon != null)
             icon
@@ -248,16 +288,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               children: [
                 avatar,
                 if (overlayIcon != null)
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: overlayIcon,
-                  ),
+                  Positioned(right: 0, bottom: 0, child: overlayIcon),
               ],
             ),
-          
+
           SizedBox(width: 12),
-          
+
           // Content
           Expanded(
             child: Column(

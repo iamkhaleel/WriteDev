@@ -9,6 +9,8 @@ class PrimaryButton extends StatelessWidget {
   final bool isLoading;
   final double? width;
   final double? height;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   const PrimaryButton({
     super.key,
@@ -20,19 +22,21 @@ class PrimaryButton extends StatelessWidget {
     this.isLoading = false,
     this.width,
     this.height,
+    this.backgroundColor,
+    this.textColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final Color bg = backgroundColor ?? Colors.white.withOpacity(0.1);
+    final Color fg = textColor ?? Colors.white;
+
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white.withOpacity(0.1),
-        foregroundColor: Colors.white,
-        minimumSize: Size(
-          width ?? double.infinity,
-          height ?? 56,
-        ),
+        backgroundColor: bg,
+        foregroundColor: fg,
+        minimumSize: Size(width ?? double.infinity, height ?? 56),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9999),
@@ -42,7 +46,7 @@ class PrimaryButton extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Background Image
+          // Background Image (optional)
           if (backgroundImage != null)
             Positioned.fill(
               child: Container(
@@ -51,63 +55,51 @@ class PrimaryButton extends StatelessWidget {
                   image: DecorationImage(
                     image: backgroundImage!,
                     fit: BoxFit.cover,
-                    opacity: 0.3, // Adjust opacity as needed
+                    opacity: 0.3,
                   ),
                 ),
               ),
             ),
 
           // Content
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+          SizedBox(
+            height: height ?? 56,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: [
-                // Leading Icon with conditional loading
                 if (isLoading)
                   SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.white.withOpacity(0.7),
-                      ),
+                      valueColor: AlwaysStoppedAnimation<Color>(fg),
                     ),
                   )
-                else if (leadingIcon != null)
+                else if (leadingIcon != null) ...[
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: leadingIcon!,
                   ),
+                ],
 
                 // Text
-                Expanded(
+                Flexible(
                   child: Text(
                     text,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.24,
-                      fontFamily: 'SpaceGrotesk',
-                    ),
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: fg),
                   ),
                 ),
 
-                // Trailing Icon (only show when not loading)
-                if (!isLoading && trailingIcon != null)
+                if (!isLoading && trailingIcon != null) ...[
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: trailingIcon!,
                   ),
-
-                // Spacer for loading state to maintain centering
-                if (isLoading && trailingIcon != null)
-                  const SizedBox(width: 28), // Matches icon size + padding
+                ],
               ],
             ),
           ),
